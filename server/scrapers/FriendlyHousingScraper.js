@@ -4,7 +4,7 @@ const cheerio = require('cheerio');
 class FriendlyHousingScraper {
   constructor() {
     this.baseUrl = 'https://friendlyhousing.nl';
-    this.searchUrl = 'https://friendlyhousing.nl/rooms-eindhoven';
+    this.searchUrl = 'https://friendlyhousing.nl/woningaanbod/';
     this.axiosConfig = {
       timeout: 30000,
       headers: {

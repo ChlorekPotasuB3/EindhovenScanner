@@ -1,11 +1,9 @@
-const KamernetScraper = require('../scrapers/KamernetScraper');
 const FundaScraper = require('../scrapers/FundaScraper');
 const FriendlyHousingScraper = require('../scrapers/FriendlyHousingScraper');
 
 class PropertyScanner {
   constructor(emailService) {
     this.emailService = emailService;
-    this.kamernetScraper = new KamernetScraper();
     this.fundaScraper = new FundaScraper();
     this.friendlyHousingScraper = new FriendlyHousingScraper();
     
@@ -16,7 +14,6 @@ class PropertyScanner {
       totalNotifications: 0,
       lastScanTime: null,
       siteStats: {
-        kamernet: { scans: 0, newProperties: 0, errors: 0 },
         funda: { scans: 0, newProperties: 0, errors: 0 },
         friendlyhousing: { scans: 0, newProperties: 0, errors: 0 }
       }
@@ -30,7 +27,6 @@ class PropertyScanner {
     this.stats.lastScanTime = new Date();
 
     const scanPromises = [
-      this.scanSite('kamernet', this.kamernetScraper),
       this.scanSite('funda', this.fundaScraper),
       this.scanSite('friendlyhousing', this.friendlyHousingScraper)
     ];
