@@ -1,4 +1,13 @@
-const puppeteer = require('puppeteer');
+// Try to use puppeteer-core if available, fallback to puppeteer
+let puppeteer;
+try {
+  puppeteer = require('puppeteer-core');
+  console.log('Using puppeteer-core');
+} catch (e) {
+  puppeteer = require('puppeteer');
+  console.log('Using puppeteer');
+}
+const fs = require('fs');
 
 class FundaScraper {
   constructor() {
@@ -9,22 +18,53 @@ class FundaScraper {
   }
 
   async initBrowser() {
-    if (!this.browser) {
-      this.browser = await puppeteer.launch({
-        headless: 'new',
-        executablePath: process.env.CHROME_PATH || puppeteer.executablePath(),
-        args: [
-          '--no-sandbox',
-          '--disable-setuid-sandbox',
-          '--disable-dev-shm-usage',
-          '--disable-accelerated-2d-canvas',
-          '--no-first-run',
-          '--no-zygote',
-          '--disable-gpu'
-        ]
-      });
+    const chromePath = process.env.CHROME_PATH || (puppeteer.executablePath ? puppeteer.executablePath() : undefined);
+    console.log('Using Chrome path:', chromePath);
+    try {
+      if (chromePath && fs.existsSync(chromePath)) {
+        console.log('Chrome binary exists and is accessible.');
+      } else {
+        console.error('Chrome binary does NOT exist at the given path!', chromePath);
+      }
+    } catch (err) {
+      console.error('Error checking Chrome binary:', err);
     }
-    
+    if (!this.browser) {
+      try {
+        this.browser = await puppeteer.launch({
+          headless: 'new',
+          executablePath: chromePath,
+          args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage',
+            '--disable-accelerated-2d-canvas',
+            '--no-first-run',
+            '--no-zygote',
+            '--disable-gpu'
+          ]
+        });
+      } catch (err) {
+        console.error('Puppeteer launch failed with executablePath. Trying without executablePath...');
+        try {
+          this.browser = await puppeteer.launch({
+            headless: 'new',
+            args: [
+              '--no-sandbox',
+              '--disable-setuid-sandbox',
+              '--disable-dev-shm-usage',
+              '--disable-accelerated-2d-canvas',
+              '--no-first-run',
+              '--no-zygote',
+              '--disable-gpu'
+            ]
+          });
+        } catch (err2) {
+          console.error('Puppeteer failed to launch even without executablePath:', err2);
+          throw err2;
+        }
+      }
+    }
     if (!this.page) {
       this.page = await this.browser.newPage();
       await this.page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36');
