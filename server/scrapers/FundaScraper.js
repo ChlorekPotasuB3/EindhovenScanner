@@ -1,6 +1,21 @@
 const puppeteer = require('puppeteer');
+const fs = require('fs');
 
 const executablePath = process.env.PUPPETEER_EXECUTABLE_PATH || undefined;
+
+console.log('PUPPETEER_EXECUTABLE_PATH:', process.env.PUPPETEER_EXECUTABLE_PATH);
+if (process.env.PUPPETEER_EXECUTABLE_PATH) {
+  console.log('Checking Chrome binary exists at:', process.env.PUPPETEER_EXECUTABLE_PATH);
+  try {
+    if (fs.existsSync(process.env.PUPPETEER_EXECUTABLE_PATH)) {
+      console.log('Chrome binary exists and is accessible.');
+    } else {
+      console.error('Chrome binary does NOT exist at the given path!');
+    }
+  } catch (err) {
+    console.error('Error checking Chrome binary:', err);
+  }
+}
 
 class FundaScraper {
   constructor() {
