@@ -38,6 +38,15 @@ Automated rental property scanner that monitors Kamernet.nl, Funda.nl, and Frien
 
 ## Environment Variables
 
+### Frontend Environment Setup
+
+Create a `.env` file in the `client/` directory with the following content:
+
+REACT_APP_API_URL=https://eindhovenscanner.onrender.com
+
+You can use the provided `.env.example` as a template. After setting this, run `npm run build` in the `client` directory, or redeploy the frontend to ensure the environment variable is picked up.
+
+
 | Variable | Description | Required |
 |----------|-------------|----------|
 | `NOTIFY_EMAIL` | Email to receive notifications | Yes |
