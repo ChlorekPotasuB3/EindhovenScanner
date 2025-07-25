@@ -35,7 +35,7 @@ class PropertyScanner {
     
     let totalNewProperties = 0;
     results.forEach((result, index) => {
-      const sites = ['kamernet', 'funda', 'friendlyhousing'];
+      const sites = ['funda', 'friendlyhousing'];
       const site = sites[index];
       
       if (result.status === 'fulfilled') {

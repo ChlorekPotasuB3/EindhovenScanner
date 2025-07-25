@@ -12,6 +12,7 @@ class FundaScraper {
     if (!this.browser) {
       this.browser = await puppeteer.launch({
         headless: 'new',
+        executablePath: process.env.CHROME_PATH || puppeteer.executablePath(),
         args: [
           '--no-sandbox',
           '--disable-setuid-sandbox',
