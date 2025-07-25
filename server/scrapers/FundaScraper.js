@@ -1,5 +1,7 @@
 const puppeteer = require('puppeteer');
 
+const executablePath = process.env.PUPPETEER_EXECUTABLE_PATH || undefined;
+
 class FundaScraper {
   constructor() {
     this.baseUrl = 'https://www.funda.nl';
@@ -12,6 +14,7 @@ class FundaScraper {
     if (!this.browser) {
       this.browser = await puppeteer.launch({
         headless: 'new',
+        executablePath,
         args: [
           '--no-sandbox',
           '--disable-setuid-sandbox',
